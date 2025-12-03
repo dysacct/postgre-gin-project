@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: 1181.s.kuaicdn.cn:11818/docker.io/postgres:17.6
+    ports:
+      - "34179:5432"
+    container_name: pg_api
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: kuaicdn
+      POSTGRES_PASSWORD: abcd001002
+      POSTGRES_DB: machine_info
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+
+  redis:
+    image: 1181.s.kuaicdn.cn:11818/docker.io/redis:7.4.1
+    container_name: redis_gin
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --save 60 1 --loglevel warning
+
+volumes:
+  postgres_data:
