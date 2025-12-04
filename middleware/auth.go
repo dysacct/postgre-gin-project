@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	"ginhub.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin"
 )
 
 func AuthRequired() gin.HandlerFunc {

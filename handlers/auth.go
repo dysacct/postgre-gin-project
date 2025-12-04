@@ -1,10 +1,11 @@
 package handlers
 
 import (
-	"net/http"
-	"gin-postgre-project/utils"
-	"gin-postgre-project/models"
 	"gin-postgre-project/database"
+	"gin-postgre-project/models"
+	"gin-postgre-project/utils"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -21,13 +22,13 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	var user modes.User
-	if err := database.DB.Where("username = ?", req.Username).First(&user).Errorl err != nil{
+	var user models.User
+	if err := database.DB.Where("username = ?", req.Username).First(&user).Error; err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "用户不存在"})
 		return
 	}
 
-	if err := bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(req.Password)); err := nil {
+	if err := bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(req.Password)); err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "用户名或密码错误"})
 		return
 	}
@@ -39,13 +40,13 @@ func Login(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"code": 200,
+		"code":    200,
 		"message": "登陆成功",
 		"data": gin.H{
-			"token": token,
+			"token":    token,
 			"username": user.Username,
-			"role": user.Role,
-			"expire": "72小时",
+			"role":     user.Role,
+			"expire":   "72小时",
 		},
 	})
 }
