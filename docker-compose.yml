@@ -22,6 +22,22 @@ services:
     ports:
       - "6379:6379"
     command: redis-server --save 60 1 --loglevel warning
-
+  cmdb-api:
+    build: .
+    container_name: cmdb-api
+    restart: always
+    ports:
+      - "34177:8080"
+    environment:
+      - GIN_MODE=release
+      - DB_HOST=3417.s.kuaicdn.cn
+      - DB_PORT=34179
+      - DB_USER=kuaicdn
+      - DB_PASSWORD=abcd001002
+      - DB_NAME=machine_info
+      - JWT_SECRET=your-super-long-secret-key-2025
+    depends_on:
+      - postgres
+      - redis
 volumes:
   postgres_data:

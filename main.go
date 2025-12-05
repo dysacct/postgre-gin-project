@@ -15,7 +15,11 @@ import (
 	"syscall"
 	"time"
 
+	_ "gin-postgre-project/docs"
+
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func main() {
@@ -27,12 +31,14 @@ func main() {
 	database.ConnectRedis()
 	r := gin.Default()
 
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 	// 公开路由
 	r.POST("/api/login", handlers.Login)
 
 	// 需要登录的路由组
 	auth := r.Group("/api")
-	auth.Use(middleware.AuthRequired())
+	auth.Use(middleware.AuthRequired()) // 使用中间件, 需要登录
 	{
 		auth.GET("/ping", func(c *gin.Context) {
 			username, _ := c.Get("username")
@@ -50,6 +56,12 @@ func main() {
 				c.JSON(200, gin.H{"message": "管理员面板"})
 			})
 		}
+		// 机器相关路由
+		auth.GET("/machines", handlers.ListMachines)            // 获取机器列表
+		auth.GET("/machine/:zbx_id", handlers.GetMachine)       // 获取单个机器
+		auth.POST("/machine", handlers.CreateMachine)           // 创建机器
+		auth.PUT("/machine/:zbx_id", handlers.UpdateMachine)    // 更新机器
+		auth.DELETE("/machine/:zbx_id", handlers.DeleteMachine) // 删除机器
 	}
 
 	srv := &http.Server{
@@ -74,14 +86,4 @@ func main() {
 	defer cancel()
 	srv.Shutdown(ctx)
 	fmt.Println("服务已关闭，程序安全退出")
-	// fmt.Println("\n正在关闭数据库连接...")
-	// sqlDB, err := database.DB.DB()
-	// if err != nil {
-	// 	log.Fatal("获取 sql.DB 失败:", err)
-	// }
-	// if err := sqlDB.Close(); err != nil {
-	// 	log.Println("关闭数据库连接失败:", err)
-	// } else {
-	// 	fmt.Println("数据库连接已关闭，程序安全退出")
-	// }
 }

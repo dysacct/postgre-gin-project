@@ -12,7 +12,7 @@ import (
 	"gorm.io/gorm"
 )
 
-var DB *gorm.DB
+var DB *gorm.DB // gorm.DB 是Gorm的ORM核心对象, 用于与数据库交互
 
 func ConnectDB() {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s",
@@ -24,16 +24,16 @@ func ConnectDB() {
 		log.Fatal("Failed to connect to database:", err)
 	}
 
-	sqlDB, err := DB.DB()
+	sqlDB, err := DB.DB() // 前面的DB是gorm.DB实例, 后面的DB()是获取底层 sql.DB 实例
 	if err != nil {
 		log.Fatal(err)
 	}
-	sqlDB.SetMaxIdleConns(10)
-	sqlDB.SetMaxOpenConns(100)
-	sqlDB.SetConnMaxLifetime(time.Hour)
+	sqlDB.SetMaxIdleConns(10)           // 最大空闲连接数
+	sqlDB.SetMaxOpenConns(100)          // 最大连接数
+	sqlDB.SetConnMaxLifetime(time.Hour) // 连接最大存活时间
 
 	fmt.Println("PostgreSQL 连接成功! ")
-	// 自动迁移
+	// 自动迁移，作用是自动创建表结构，给模型自动添加表名(如果表不存在)
 	DB.AutoMigrate(
 		&models.User{},
 		&models.IDCInfo{},

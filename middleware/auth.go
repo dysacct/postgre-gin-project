@@ -8,6 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// HandlerFunc 类型接口是 Gin 框架的中间件接口，用于处理请求的中间件
+// 登录验证, 需要登录
 func AuthRequired() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
@@ -17,7 +19,7 @@ func AuthRequired() gin.HandlerFunc {
 			return
 		}
 
-		parts := strings.SplitN(authHeader, " ", 2) // 分割成两部分，第一部分是Bearer，第二部分是Token
+		parts := strings.SplitN(authHeader, " ", 2)
 		if !(len(parts) == 2 && parts[0] == "Bearer") {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "token 格式错误"})
 			c.Abort()
@@ -38,7 +40,7 @@ func AuthRequired() gin.HandlerFunc {
 	}
 }
 
-// gin.HandlerFunc 类型接口是 Gin 框架的中间件接口，用于处理请求的中间件
+// 这一步是管理员专属路由, 需要管理员权限
 func AdminRequired() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		role, _ := c.Get("role")
