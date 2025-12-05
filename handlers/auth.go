@@ -1,3 +1,15 @@
+// Login godoc
+// @Summary      用户登录
+// @Description  使用用户名密码登录获取 JWT token
+// @Tags         认证
+// @Accept       json
+// @Produce      json
+// @Param        body body LoginRequest true "登录信息"
+// @Success      200 {object} models.Response
+// @Failure      400 {object} models.Response
+// @Failure      401 {object} models.Response
+// @Router       /login [post]
+
 package handlers
 
 import (

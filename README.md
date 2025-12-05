@@ -15,3 +15,12 @@ docker-compose -f docker-compose.prod.yml up -d --build
 
 ## 接口文档
 http://your-ip:8080/swagger/index.html
+```
+
+```bash
+步骤 1：安装 swag 工具（只装一次）
+go install github.com/swaggo/swag/cmd/swag@latest
+
+# 一定要在项目根目录执行（go.mod 所在目录）
+swag init
+```

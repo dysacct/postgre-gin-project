@@ -19,7 +19,18 @@ func cacheKey(zbxID string) string {
 	return "cache:machine:" + zbxID
 }
 
-// Get获取机器信息
+// GetMachine godoc
+// @Summary      获取单个机器信息
+// @Description  根据zbx_id获取机器的详细信息，包括IDC、机器、业务、网络信息
+// @Tags         machines
+// @Accept       json
+// @Produce      json
+// @Param        zbx_id path string true "机器唯一标识"
+// @Success      200 {object} models.Response
+// @Failure      400 {object} models.Response
+// @Failure      404 {object} models.Response
+// @Security     ApiKeyAuth
+// @Router       /machine/{zbx_id} [get]
 func GetMachine(c *gin.Context) {
 	zbxID := c.Param("zbx_id") // 从URL路径参数获取zbx_id
 	if zbxID == "" {
@@ -86,7 +97,18 @@ func GetMachine(c *gin.Context) {
 	slog.Info("数据库查询并已经缓存", "zbx_id", zbxID)
 }
 
-// 新增机器(写入后机器清除可能得前置缓存)
+// CreateMachine godoc
+// @Summary      创建机器
+// @Description  创建新的机器记录
+// @Tags         machines
+// @Accept       json
+// @Produce      json
+// @Param        body body models.IDCInfo true "机器信息"
+// @Success      200 {object} models.Response
+// @Failure      400 {object} models.Response
+// @Failure      500 {object} models.Response
+// @Security     ApiKeyAuth
+// @Router       /machine [post]
 func CreateMachine(c *gin.Context) {
 	var idc models.IDCInfo
 	// ShouldBindJSON 是Gin框架的函数, 用于将请求体中的JSON数据绑定到结构体中
@@ -118,7 +140,18 @@ func CreateMachine(c *gin.Context) {
 	})
 }
 
-// 3. 更新机器 (更新后立即清除缓存)
+// UpdateMachine godoc
+// @Summary      更新机器信息
+// @Description  根据zbx_id更新机器信息
+// @Tags         machines
+// @Accept       json
+// @Produce      json
+// @Param        zbx_id path string true "机器唯一标识"
+// @Param        body body models.IDCInfo true "更新的机器信息"
+// @Success      200 {object} models.Response
+// @Failure      400 {object} models.Response
+// @Security     ApiKeyAuth
+// @Router       /machine/{zbx_id} [put]
 func UpdateMachine(c *gin.Context) {
 	zbxID := c.Param("zbx_id") // 从URL中获取zbx_id
 	var idc models.IDCInfo
@@ -143,7 +176,17 @@ func UpdateMachine(c *gin.Context) {
 	})
 }
 
-// 删除机器(删除后清除缓存)
+// DeleteMachine godoc
+// @Summary      删除机器
+// @Description  根据zbx_id删除机器记录
+// @Tags         machines
+// @Accept       json
+// @Produce      json
+// @Param        zbx_id path string true "机器唯一标识"
+// @Success      200 {object} models.Response
+// @Failure      500 {object} models.Response
+// @Security     ApiKeyAuth
+// @Router       /machine/{zbx_id} [delete]
 func DeleteMachine(c *gin.Context) {
 	zbxID := c.Param("zbx_id")
 	// http.StatusInternalServerError 是HTTP状态码, 表示服务器内部错误

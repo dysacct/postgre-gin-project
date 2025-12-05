@@ -8,7 +8,7 @@
 // @Param        size      query     int     false  "每页数量"  default(20)
 // @Param        search    query     string  false  "全局搜索关键词（支持zbx_id/IP/机房/业务名）"
 // @Param        idc_code  query     string  false  "机房编码过滤"
-// @Success      200       {object}  handlers.ListResponse
+// @Success      200       {object}  ListResponse
 // @Security     ApiKeyAuth
 // @Router       /machines [get]
 

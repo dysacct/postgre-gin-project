@@ -1,4 +1,14 @@
-// main.go
+// Package main CMDB资产管理系统
+// @title CMDB资产管理系统
+// @version 1.0
+// @description 高性能资产管理平台, 支持全局搜索、缓存、JWT认证
+// @contact.name 运维开发组
+// @contact.email devops@dongsoftware.com
+// @host localhost:8080
+// @BasePath /api
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 package main
 
 import (
